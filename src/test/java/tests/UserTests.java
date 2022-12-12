@@ -6,6 +6,7 @@ import models.pojo.BodyPojoModel;
 import models.pojo.BodyResponsePojoModel;
 import org.junit.jupiter.api.Test;
 
+import static specs.CommonSpecs.CommonRequestSpec;
 import static specs.Spec.requestSpec;
 import static specs.Spec.responseSpec;
 import static io.restassured.RestAssured.given;
@@ -99,4 +100,18 @@ public class UserTests {
                 .statusCode (204);
 
     }
+
+    @Test
+    void getUnknownListGroovy() {
+        given()
+                .spec(CommonRequestSpec)
+                .when()
+                .get("/api/unknown")
+                .then()
+                .statusCode(200)
+                .log().all()
+                .body("data.findAll{it.year > 2001 }.name",
+                        hasItems("blue turquoise","tigerlily"));
+    }
+
 }
